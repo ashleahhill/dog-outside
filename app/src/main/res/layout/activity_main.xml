@@ -13,7 +13,8 @@
         android:layout_height="264dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_dog_photo_display" />
 
     <fragment
         android:id="@+id/fragment_main_content"
@@ -25,5 +26,6 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_dog_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_dog_photo"
+        tools:layout="@layout/fragment_main_content" />
 </android.support.constraint.ConstraintLayout>

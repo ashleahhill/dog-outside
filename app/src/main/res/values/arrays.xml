@@ -5,9 +5,4 @@
         <item>@string/pref_dog_status_inside</item>
         <item>@string/pref_dog_status_bed</item>
     </array>
-    <array name="pref_dog_status_labels">
-        <item>@string/pref_dog_status_outside_label</item>
-        <item>@string/pref_dog_status_inside_label</item>
-        <item>@string/pref_dog_status_bed_label</item>
-    </array>
 </resources>
