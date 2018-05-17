@@ -17,21 +17,21 @@
     <string name="pref_dog_name_default">Wan Wan</string>
     <!-- Pref Dog Status -->
     <string name="pref_dog_status_key" translatable="false">dog_status</string>
-    <string name="pref_dog_status_outside" translatable="false">outside</string>
-    <string name="pref_dog_status_inside" translatable="false">inside</string>
-    <string name="pref_dog_status_bed" translatable="false">bed</string>
+    <string name="pref_dog_status_outside">Outside</string>
+    <string name="pref_dog_status_inside">Inside</string>
+    <string name="pref_dog_status_bed">In Bed</string>
 
     <string name="pref_dog_status_outside_label">Outside</string>
     <string name="pref_dog_status_inside_label">Inside</string>
     <string name="pref_dog_status_bed_label">In Bed</string>
 
     <string-array name="pref_dog_status">
-        <item>@string/pref_dog_status_outside_label</item>
-        <item>@string/pref_dog_status_inside_label</item>
-        <item>@string/pref_dog_status_bed_label</item>
+        <item>@string/pref_dog_status_outside</item>
+        <item>@string/pref_dog_status_inside</item>
+        <item>@string/pref_dog_status_bed</item>
     </string-array>
 
-    <string name="pref_dog_status_default">@string/pref_dog_status_bed_label</string>
+    <string name="pref_dog_status_default">@string/pref_dog_status_bed</string>
 
 
     <!-- Pref Away -->

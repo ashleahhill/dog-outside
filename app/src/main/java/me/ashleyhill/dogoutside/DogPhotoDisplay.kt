@@ -1,12 +1,18 @@
 package me.ashleyhill.dogoutside
 
 import android.content.Context
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.getDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import kotlinx.android.synthetic.main.fragment_dog_photo_display.*
+import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -40,7 +46,10 @@ class DogPhotoDisplay : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dog_photo_display, container, false)
+        var view = inflater.inflate(R.layout.fragment_dog_photo_display, container, false)
+
+        setImageFromPreference(view.findViewById(R.id.dog_photo_display))
+        return view
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -96,5 +105,18 @@ class DogPhotoDisplay : Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+    }
+
+    fun setImageFromPreference(imageView: ImageView) {
+        val context = this.requireContext()
+        val dogStatus = DogOutsidePreferences().getDogStatus(context, PreferenceManager.getDefaultSharedPreferences(context))
+
+        if (dogStatus == getString(R.string.pref_dog_status_outside)) {
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_outside))
+        } else if (dogStatus == getString(R.string.pref_dog_status_inside)) {
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_inside))
+        } else if (dogStatus == getString(R.string.pref_dog_status_bed)) {
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_in_bed))
+        }
     }
 }

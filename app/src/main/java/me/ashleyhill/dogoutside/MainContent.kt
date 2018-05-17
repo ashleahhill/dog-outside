@@ -8,6 +8,8 @@ import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_main_content.*
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
@@ -27,7 +29,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class MainContent : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MainContent : Fragment(),
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        AdapterView.OnItemSelectedListener{
+
     private val TAG: String? = MainContent::class.simpleName
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -60,6 +65,9 @@ class MainContent : Fragment(), SharedPreferences.OnSharedPreferenceChangeListen
         Log.i(TAG, dogTitle)
 
         view.findViewById<TextView>(R.id.tv_dog_title).text = dogTitle
+        val spinnerDogStatus = view.findViewById<Spinner>(R.id.spinner_dog_status)
+
+        spinnerDogStatus.onItemSelectedListener = this
 
         return view
     }
@@ -125,5 +133,20 @@ class MainContent : Fragment(), SharedPreferences.OnSharedPreferenceChangeListen
 //            val dogTitle = getString(R.string.dog_title, dogName)
            this.tv_dog_title.text = DogOutsidePreferences().getDogName(this.requireContext(), sharedPreferences);
         }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        val value = parent.getItemAtPosition(position)
+
+        Log.i(TAG, value.toString())
+
+        val context = this.requireContext()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireContext())
+
+        DogOutsidePreferences().setDogStatus(context, sharedPreferences, value.toString())
     }
 }
