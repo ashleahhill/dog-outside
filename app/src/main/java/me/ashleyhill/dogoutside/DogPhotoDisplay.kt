@@ -1,6 +1,7 @@
 package me.ashleyhill.dogoutside
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.Image
 import android.net.Uri
 import android.os.Bundle
@@ -29,7 +30,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class DogPhotoDisplay : Fragment() {
+class DogPhotoDisplay : Fragment(),
+        SharedPreferences.OnSharedPreferenceChangeListener {
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -41,6 +45,14 @@ class DogPhotoDisplay : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(this.context)
+                .unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +60,14 @@ class DogPhotoDisplay : Fragment() {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_dog_photo_display, container, false)
 
-        setImageFromPreference(view.findViewById(R.id.dog_photo_display))
+//        setImageFromPreference(view.findViewById(R.id.dog_photo_display))
+        var imageView = view.findViewById<ImageView>(R.id.dog_photo_display)
+//        GlideApp.with(view)
+//                .load(R.drawable.dog_outside)
+//                .centerCrop()
+//                .into(imageView)
+
+        setImageFromPreference(view, imageView)
         return view
     }
 
@@ -107,16 +126,41 @@ class DogPhotoDisplay : Fragment() {
                 }
     }
 
-    fun setImageFromPreference(imageView: ImageView) {
+    fun setImageFromPreference(view: View, imageView: ImageView) {
+//        val view = this.view
+
+//        val imageView = view!!.findViewById<ImageView>(R.id.dog_photo_display)
+//        GlideApp.with(view)
+//                .load(R.drawable.dog_outside)
+//                .centerCrop()
+//                .into(imageView)
+
+//        val imageView = this.dog_photo_display
+
         val context = this.requireContext()
         val dogStatus = DogOutsidePreferences().getDogStatus(context, PreferenceManager.getDefaultSharedPreferences(context))
 
         if (dogStatus == getString(R.string.pref_dog_status_outside)) {
-            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_outside))
+            GlideApp.with(view!!)
+                    .load(R.drawable.dog_outside)
+                    .centerCrop()
+                    .into(imageView)
         } else if (dogStatus == getString(R.string.pref_dog_status_inside)) {
-            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_inside))
+            GlideApp.with(view!!)
+                    .load(R.drawable.dog_inside)
+                    .centerCrop()
+                    .into(imageView)
         } else if (dogStatus == getString(R.string.pref_dog_status_bed)) {
-            imageView.setImageDrawable(context.getDrawable(R.drawable.dog_in_bed))
+            GlideApp.with(view!!)
+                    .load(R.drawable.dog_in_bed)
+                    .centerCrop()
+                    .into(imageView)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == getString(R.string.pref_dog_status_key)) {
+           setImageFromPreference(this.view!!, this.dog_photo_display)
         }
     }
 }

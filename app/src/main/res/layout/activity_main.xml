@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/fragment_dog_photo"
         android:name="me.ashleyhill.dogoutside.DogPhotoDisplay"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="264dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
