@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_dog_photo_display.*
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 
@@ -126,36 +127,22 @@ class DogPhotoDisplay : Fragment(),
                 }
     }
 
-    fun setImageFromPreference(view: View, imageView: ImageView) {
-//        val view = this.view
-
-//        val imageView = view!!.findViewById<ImageView>(R.id.dog_photo_display)
-//        GlideApp.with(view)
-//                .load(R.drawable.dog_outside)
-//                .centerCrop()
-//                .into(imageView)
-
-//        val imageView = this.dog_photo_display
-
+    private fun setImageFromPreference(view: View, imageView: ImageView) {
         val context = this.requireContext()
         val dogStatus = DogOutsidePreferences().getDogStatus(context, PreferenceManager.getDefaultSharedPreferences(context))
 
-        if (dogStatus == getString(R.string.pref_dog_status_outside)) {
-            GlideApp.with(view!!)
-                    .load(R.drawable.dog_outside)
-                    .centerCrop()
-                    .into(imageView)
-        } else if (dogStatus == getString(R.string.pref_dog_status_inside)) {
-            GlideApp.with(view!!)
-                    .load(R.drawable.dog_inside)
-                    .centerCrop()
-                    .into(imageView)
-        } else if (dogStatus == getString(R.string.pref_dog_status_bed)) {
-            GlideApp.with(view!!)
-                    .load(R.drawable.dog_in_bed)
-                    .centerCrop()
-                    .into(imageView)
+        var drawableId: Int? = null
+
+        when (dogStatus) {
+            getString(R.string.pref_dog_status_outside) -> drawableId = R.drawable.dog_outside
+            getString(R.string.pref_dog_status_inside) -> drawableId = R.drawable.dog_inside
+            getString(R.string.pref_dog_status_bed) -> drawableId = R.drawable.dog_in_bed
         }
+
+        GlideApp.with(view)
+                .load(drawableId)
+                .centerCrop()
+                .into(imageView)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
