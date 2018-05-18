@@ -11,10 +11,15 @@
     <string name="dog_title_suffix"> is</string>
     <string name="dummy_dog_title">Snowy is</string>
 
+    <!-- Preferences -->
+
+    <!-- Pref Dog Name -->
+
     <string name="pref_header_dog">About Your Dog</string>
     <string name="pref_dog_name_key" translatable="false">dog_name</string>
     <string name="pref_dog_name_title">Dog Name</string>
     <string name="pref_dog_name_default">Wan Wan</string>
+
     <!-- Pref Dog Status -->
     <string name="pref_dog_status_key" translatable="false">dog_status</string>
     <string name="pref_dog_status_outside">Outside</string>
@@ -38,8 +43,7 @@
     <string name="pref_away_key" translatable="false">status_away</string>
     <string name="pref_away_title" translatable="false">Away</string>
 
-    <!-- Notification -->
-    <string name="notification_dog_outside">Your dog is outside!</string>
+
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -113,4 +117,13 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <!-- Notification -->
+    <string name="notification_dog_outside_title">Your dog is outside!</string>
+    <string name="notification_dog_outside">Your dog is outside.</string>
+    <string name="notification_channel_title">Dog outside timer</string>
+    <string name="notification_channel_description">Shows how long your dog has been outside</string>
+
+
 </resources>

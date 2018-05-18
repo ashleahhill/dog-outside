@@ -7,13 +7,17 @@ import android.util.Log
 import android.view.Menu
 import android.content.Intent
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.view.MenuItem
+import me.ashleyhill.dogoutside.data.DogOutsidePreferences
+import me.ashleyhill.dogoutside.util.DogOutsideNotificationUtils
 
 
 class MainActivity :
         AppCompatActivity(),
         MainContent.OnFragmentInteractionListener,
-        DogPhotoDisplay.OnFragmentInteractionListener {
+        DogPhotoDisplay.OnFragmentInteractionListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val TAG = MainActivity::class.java.simpleName
 
@@ -24,6 +28,13 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -63,5 +74,15 @@ class MainActivity :
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == this.getString(R.string.pref_dog_status_key)) {
+            when (DogOutsidePreferences().getDogStatus(this, sharedPreferences!!)) {
+                getString(R.string.pref_dog_status_outside) -> DogOutsideNotificationUtils().notifyOutside(this)
+                else -> DogOutsideNotificationUtils().cancelNotifyOutside(this)
+
+            }
+        }
     }
 }
