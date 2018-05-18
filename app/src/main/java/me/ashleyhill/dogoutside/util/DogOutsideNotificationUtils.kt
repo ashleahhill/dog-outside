@@ -2,10 +2,13 @@ package me.ashleyhill.dogoutside.util
 
 import android.app.NotificationManager
 import android.app.NotificationChannel
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import me.ashleyhill.dogoutside.MainActivity
 import me.ashleyhill.dogoutside.R
 
 
@@ -25,6 +28,7 @@ class DogOutsideNotificationUtils {
                     .setSmallIcon(R.drawable.ic_access_time_black_24dp)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setOngoing(true)
+                    .setContentIntent(getOpenMainIntent(this))
                     .setOnlyAlertOnce(true)
         }
     }
@@ -44,6 +48,12 @@ class DogOutsideNotificationUtils {
         val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
 
         notificationManager.cancel(OUTSIDE_NOTIFICATION_ID);
+    }
+
+    private fun getOpenMainIntent(context: Context): PendingIntent {
+        val mainActivityIntent = Intent(context, MainActivity::class.java)
+
+        return PendingIntent.getActivity(context, 0, mainActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun createNotificationChannel(context: Context) {
