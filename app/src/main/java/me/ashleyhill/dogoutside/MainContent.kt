@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_main_content.*
@@ -60,13 +61,18 @@ class MainContent : Fragment(),
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_content, container, false)
+        val context = this.requireContext()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val dogTitle = DogOutsidePreferences().getDogName(this.requireContext(), PreferenceManager.getDefaultSharedPreferences(this.requireContext()))
-        Log.i(TAG, dogTitle)
-
+        // Set the dog title "Snowy is..."
+        val dogTitle = DogOutsidePreferences().getDogName(context, sharedPreferences)
         view.findViewById<TextView>(R.id.tv_dog_title).text = dogTitle
-        val spinnerDogStatus = view.findViewById<Spinner>(R.id.spinner_dog_status)
 
+        // Sync the dog status spinner with what's in preferences
+        val spinnerDogStatus = view.findViewById<Spinner>(R.id.spinner_dog_status)
+        spinnerDogStatus.setSelection((spinnerDogStatus.adapter as ArrayAdapter<String>).getPosition(DogOutsidePreferences().getDogStatus(context, sharedPreferences)))
+
+        // set this as the spinner listener
         spinnerDogStatus.onItemSelectedListener = this
 
         return view

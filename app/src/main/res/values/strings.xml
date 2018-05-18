@@ -7,8 +7,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- Main display -->
-    <string name="dog_title">%1$s is</string>
-    <string name="dog_title_suffix"> is</string>
+    <string name="dog_title">%1$s is...</string>
     <string name="dummy_dog_title">Snowy is</string>
 
     <!-- Preferences -->
