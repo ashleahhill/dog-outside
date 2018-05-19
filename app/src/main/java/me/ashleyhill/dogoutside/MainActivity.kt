@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.view.MenuItem
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
+import me.ashleyhill.dogoutside.sync.OutsideTimerService
 import me.ashleyhill.dogoutside.util.DogOutsideNotificationUtils
 
 
@@ -76,13 +77,24 @@ class MainActivity :
         return super.onOptionsItemSelected(item)
     }
 
+    fun handleDogOutside() {
+        DogOutsidePreferences().setTimeOutsideStart(this, PreferenceManager.getDefaultSharedPreferences(this))
+        startService(Intent(this, OutsideTimerService::class.java))
+    }
+
+    fun handleDogInside() {
+        DogOutsidePreferences().clearTimeOutsideStart(this, PreferenceManager.getDefaultSharedPreferences(this))
+        stopService(Intent(this, OutsideTimerService::class.java))
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == this.getString(R.string.pref_dog_status_key)) {
-            when (DogOutsidePreferences().getDogStatus(this, sharedPreferences!!)) {
-                getString(R.string.pref_dog_status_outside) -> DogOutsideNotificationUtils().notifyOutside(this)
-                else -> DogOutsideNotificationUtils().cancelNotifyOutside(this)
-
+            if (DogOutsidePreferences().getDogStatus(this, sharedPreferences!!) == getString(R.string.pref_dog_status_outside)) {
+                handleDogOutside()
+            } else {
+                handleDogInside()
             }
+
         }
     }
 }

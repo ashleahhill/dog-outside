@@ -6,10 +6,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import me.ashleyhill.dogoutside.MainActivity
 import me.ashleyhill.dogoutside.R
+import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 
 
 class DogOutsideNotificationUtils {
@@ -24,7 +26,7 @@ class DogOutsideNotificationUtils {
 
             notificationBuilder = NotificationCompat.Builder(this, OUTSIDE_NOTIFICATION_CHANNEL_ID)
                     .setColor(getColor(R.color.colorPrimary))
-                    .setContentText(getString(R.string.notification_dog_outside))
+                    .setContentTitle(DogOutsidePreferences().getDogNotification(context, PreferenceManager.getDefaultSharedPreferences(context)))
                     .setSmallIcon(R.drawable.ic_access_time_black_24dp)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setOngoing(true)
@@ -39,7 +41,7 @@ class DogOutsideNotificationUtils {
         if (notificationBuilder == null) {
             createOutsideNotification(context)
         }
-        notificationBuilder!!.setContentTitle(context.getString(R.string.notification_dog_outside_title))
+        notificationBuilder!!.setContentText(DogOutsidePreferences().getTimeElapsedOutsideFormatted(context, PreferenceManager.getDefaultSharedPreferences(context)))
 
         notificationManager.notify(OUTSIDE_NOTIFICATION_ID, notificationBuilder!!.build())
     }

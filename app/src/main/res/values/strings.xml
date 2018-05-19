@@ -37,6 +37,12 @@
 
     <string name="pref_dog_status_default">@string/pref_dog_status_bed</string>
 
+    <!-- Pref Dog Outside Start -->
+    <string name="pref_dog_outside_start_key" translatable="false">dog_outside_start</string>
+
+    <!-- Pref Dog Outside End -->
+    <string name="pref_dog_outside_end_key" translatable="false">dog_outside_end</string>
+
 
     <!-- Pref Away -->
     <string name="pref_away_key" translatable="false">status_away</string>
@@ -120,7 +126,7 @@
 
     <!-- Notification -->
     <string name="notification_dog_outside_title">Your dog is outside!</string>
-    <string name="notification_dog_outside">Your dog is outside.</string>
+    <string name="notification_dog_outside">%1$s is outside!</string>
     <string name="notification_channel_title">Dog outside timer</string>
     <string name="notification_channel_description">Shows how long your dog has been outside</string>
 

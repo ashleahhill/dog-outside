@@ -49,12 +49,15 @@ class MainContent : Fragment(),
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
             sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+
+//        handleTimerService(this.context!!, true)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         PreferenceManager.getDefaultSharedPreferences(this.context)
                 .unregisterOnSharedPreferenceChangeListener(this)
+//        handleTimerService(this.context!!, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +68,7 @@ class MainContent : Fragment(),
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         // Set the dog title "Snowy is..."
-        val dogTitle = DogOutsidePreferences().getDogName(context, sharedPreferences)
+        val dogTitle = DogOutsidePreferences().getDogTitle(context, sharedPreferences)
         view.findViewById<TextView>(R.id.tv_dog_title).text = dogTitle
 
         // Sync the dog status spinner with what's in preferences
@@ -137,7 +140,7 @@ class MainContent : Fragment(),
         if (key == getString(R.string.pref_dog_name_key)) {
 //            val dogName = sharedPreferences.getString(getString(R.string.pref_dog_name_key), "")
 //            val dogTitle = getString(R.string.dog_title, dogName)
-           this.tv_dog_title.text = DogOutsidePreferences().getDogName(this.requireContext(), sharedPreferences);
+           this.tv_dog_title.text = DogOutsidePreferences().getDogTitle(this.requireContext(), sharedPreferences);
         }
     }
 
