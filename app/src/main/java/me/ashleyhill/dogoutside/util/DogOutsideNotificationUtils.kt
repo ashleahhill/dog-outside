@@ -50,7 +50,7 @@ class DogOutsideNotificationUtils {
         fun cancelNotifyOutside(context: Context) {
             val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
 
-            notificationManager.cancel(OUTSIDE_NOTIFICATION_ID);
+            notificationManager.cancel(OUTSIDE_NOTIFICATION_ID)
         }
 
         private fun getOpenMainIntent(context: Context): PendingIntent {
