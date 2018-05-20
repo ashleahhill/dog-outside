@@ -2,17 +2,14 @@ package me.ashleyhill.dogoutside
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.getDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_dog_photo_display.*
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 
@@ -129,7 +126,7 @@ class DogPhotoDisplay : Fragment(),
 
     private fun setImageFromPreference(view: View, imageView: ImageView) {
         val context = this.requireContext()
-        val dogStatus = DogOutsidePreferences().getDogStatus(context, PreferenceManager.getDefaultSharedPreferences(context))
+        val dogStatus = DogOutsidePreferences.getDogStatus(context)
 
         var drawableId: Int? = null
 

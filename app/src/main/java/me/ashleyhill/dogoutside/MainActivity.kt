@@ -77,19 +77,19 @@ class MainActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    fun handleDogOutside() {
-        DogOutsidePreferences().setTimeOutsideStart(this, PreferenceManager.getDefaultSharedPreferences(this))
+    private fun handleDogOutside() {
+        DogOutsidePreferences.setTimeOutsideStart(this)
         startService(Intent(this, OutsideTimerService::class.java))
     }
 
-    fun handleDogInside() {
-        DogOutsidePreferences().clearTimeOutsideStart(this, PreferenceManager.getDefaultSharedPreferences(this))
+    private fun handleDogInside() {
+        DogOutsidePreferences.clearTimeOutsideStart(this)
         stopService(Intent(this, OutsideTimerService::class.java))
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == this.getString(R.string.pref_dog_status_key)) {
-            if (DogOutsidePreferences().getDogStatus(this, sharedPreferences!!) == getString(R.string.pref_dog_status_outside)) {
+            if (DogOutsidePreferences.getDogOutside(this)) {
                 handleDogOutside()
             } else {
                 handleDogInside()

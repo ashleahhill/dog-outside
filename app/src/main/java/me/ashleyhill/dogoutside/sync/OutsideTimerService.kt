@@ -20,8 +20,11 @@ import kotlin.concurrent.timerTask
  * https://medium.com/@raziaranisandhu/create-services-never-stop-in-android-b5dcfc5fb4b2
  */
 class OutsideTimerService : Service() {
-    private val TAG = "OutsideTimerService"
-    private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
+    companion object {
+        private val TAG = "OutsideTimerService"
+        private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
+    }
+
     private var timer = Timer()
     private var context: Context? = null
 
@@ -38,23 +41,19 @@ class OutsideTimerService : Service() {
         Log.d(TAG, "Start to do an action")
     }
 
-    inner class logTask: TimerTask() {
+    inner class NotifyTask: TimerTask() {
         override fun run() {
             // Print a log
             Log.d(TAG, "Running")
-            DogOutsideNotificationUtils().notifyOutside(context!!)
+            DogOutsideNotificationUtils.notifyOutside(context!!)
         }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        // TODO Auto-generated method stub
-        // Display the Toast Message
         Log.d(TAG, "Start to do an action")
 
-
-        // Execute an action after period time
         context = this.applicationContext
-        timer.scheduleAtFixedRate(logTask(), 0, INTERVAL)
+        timer.scheduleAtFixedRate(NotifyTask(), 0, INTERVAL)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -63,7 +62,7 @@ class OutsideTimerService : Service() {
         // Display the Toast Message
         Log.d(TAG, "StopService")
         if (context != null) {
-            DogOutsideNotificationUtils().cancelNotifyOutside(context!!)
+            DogOutsideNotificationUtils.cancelNotifyOutside(context!!)
         }
         timer?.cancel()
         super.onDestroy()

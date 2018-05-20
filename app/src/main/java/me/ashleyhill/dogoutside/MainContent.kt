@@ -68,12 +68,12 @@ class MainContent : Fragment(),
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         // Set the dog title "Snowy is..."
-        val dogTitle = DogOutsidePreferences().getDogTitle(context, sharedPreferences)
+        val dogTitle = DogOutsidePreferences.getDogTitle(context)
         view.findViewById<TextView>(R.id.tv_dog_title).text = dogTitle
 
         // Sync the dog status spinner with what's in preferences
         val spinnerDogStatus = view.findViewById<Spinner>(R.id.spinner_dog_status)
-        spinnerDogStatus.setSelection((spinnerDogStatus.adapter as ArrayAdapter<String>).getPosition(DogOutsidePreferences().getDogStatus(context, sharedPreferences)))
+        spinnerDogStatus.setSelection((spinnerDogStatus.adapter as ArrayAdapter<String>).getPosition(DogOutsidePreferences.getDogStatus(context)))
 
         // set this as the spinner listener
         spinnerDogStatus.onItemSelectedListener = this
@@ -140,7 +140,7 @@ class MainContent : Fragment(),
         if (key == getString(R.string.pref_dog_name_key)) {
 //            val dogName = sharedPreferences.getString(getString(R.string.pref_dog_name_key), "")
 //            val dogTitle = getString(R.string.dog_title, dogName)
-           this.tv_dog_title.text = DogOutsidePreferences().getDogTitle(this.requireContext(), sharedPreferences);
+           this.tv_dog_title.text = DogOutsidePreferences.getDogTitle(this.requireContext());
         }
     }
 
@@ -154,8 +154,7 @@ class MainContent : Fragment(),
         Log.i(TAG, value.toString())
 
         val context = this.requireContext()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireContext())
 
-        DogOutsidePreferences().setDogStatus(context, sharedPreferences, value.toString())
+        DogOutsidePreferences.setDogStatus(context, value.toString())
     }
 }
