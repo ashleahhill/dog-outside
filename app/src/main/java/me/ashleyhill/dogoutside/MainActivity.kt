@@ -17,20 +17,14 @@ import me.ashleyhill.dogoutside.sync.OutsideTimerService.LocalBinder
 import android.os.IBinder
 import android.content.ServiceConnection
 
+private val TAG = MainActivity::class.java.simpleName
 
 class MainActivity :
         AppCompatActivity(),
-        MainContent.OnFragmentInteractionListener,
-        DogPhotoDisplay.OnFragmentInteractionListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val TAG = MainActivity::class.java.simpleName
     private var mService: OutsideTimerService? = null
     private var mBound: Boolean = false
-
-    override fun onFragmentInteraction(uri: Uri) {
-        Log.d(TAG, uri.toString())
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +42,6 @@ class MainActivity :
     override fun onStop() {
         super.onStop()
         unbindService(mConnection)
-        mBound = false
     }
     override fun onDestroy() {
         super.onDestroy()

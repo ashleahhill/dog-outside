@@ -6,7 +6,6 @@ import me.ashleyhill.dogoutside.R
 import android.preference.PreferenceManager
 import android.util.Log
 
-
 class DogOutsidePreferences {
     companion object {
 
@@ -82,7 +81,7 @@ class DogOutsidePreferences {
 
                 return String.format("%d:%02d", minutes, seconds)
             }
-            return ""
+            return "00:00"
         }
 
 

@@ -16,7 +16,7 @@ class OutsideTimerJobService: JobService() {
     companion object {
         private val TAG = OutsideTimerJobService::class.java.simpleName
 
-        val JOB_ID: Int = 2000
+        const val JOB_ID: Int = 2000
         private val TIMER_JOB_INTERVAL: Long = TimeUnit.MINUTES.toMillis(1)
 
         fun schedule(context: Context) {

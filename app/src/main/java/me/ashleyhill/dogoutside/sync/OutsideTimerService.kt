@@ -16,13 +16,14 @@ import me.ashleyhill.dogoutside.util.DogOutsideNotificationUtils
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.timerTask
 
+private val TAG = OutsideTimerService::class.java.simpleName
+
 
 /**
  * https://medium.com/@raziaranisandhu/create-services-never-stop-in-android-b5dcfc5fb4b2
  */
 class OutsideTimerService : Service() {
     companion object {
-        private val TAG = "OutsideTimerService"
         private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
     }
 
@@ -37,7 +38,7 @@ class OutsideTimerService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        Log.d(TAG, "Start Service")
+        Log.d(TAG, "Create Service")
     }
 
     inner class LocalBinder: Binder() {
@@ -66,13 +67,13 @@ class OutsideTimerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d(TAG, "Start to do an action")
+        Log.d(TAG, "Start Service")
 
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "StopService")
+        Log.d(TAG, "Destroy Service")
 
         super.onDestroy()
     }
