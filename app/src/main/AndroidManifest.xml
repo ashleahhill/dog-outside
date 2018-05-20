@@ -28,7 +28,7 @@
                 android:value="me.ashleyhill.dogoutside.MainActivity" />
         </activity>
         <service android:name=".sync.OutsideTimerService" />
-        <service android:name=".sync.OutsideTimerJobService" android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!--<service android:name=".sync.OutsideTimerJobService" android:permission="android.permission.BIND_JOB_SERVICE" />-->
     </application>
 
 </manifest>

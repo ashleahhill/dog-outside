@@ -1,5 +1,6 @@
 package me.ashleyhill.dogoutside
 
+import android.content.Context
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,7 +12,10 @@ import android.preference.PreferenceManager
 import android.view.MenuItem
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 import me.ashleyhill.dogoutside.sync.OutsideTimerService
-import me.ashleyhill.dogoutside.util.DogOutsideNotificationUtils
+import android.content.ComponentName
+import me.ashleyhill.dogoutside.sync.OutsideTimerService.LocalBinder
+import android.os.IBinder
+import android.content.ServiceConnection
 
 
 class MainActivity :
@@ -21,6 +25,8 @@ class MainActivity :
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val TAG = MainActivity::class.java.simpleName
+    private var mService: OutsideTimerService? = null
+    private var mBound: Boolean = false
 
     override fun onFragmentInteraction(uri: Uri) {
         Log.d(TAG, uri.toString())
@@ -30,12 +36,23 @@ class MainActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val intent = Intent(this, OutsideTimerService::class.java)
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindService(mConnection)
+        mBound = false
+    }
     override fun onDestroy() {
         super.onDestroy()
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this)
     }
 
     /**
@@ -79,22 +96,49 @@ class MainActivity :
 
     private fun handleDogOutside() {
         DogOutsidePreferences.setTimeOutsideStart(this)
-        startService(Intent(this, OutsideTimerService::class.java))
+
+        if (mBound) {
+            mService?.startTimer()
+        }
     }
 
     private fun handleDogInside() {
         DogOutsidePreferences.clearTimeOutsideStart(this)
-        stopService(Intent(this, OutsideTimerService::class.java))
+
+        if (mBound) {
+            mService?.stopTimer()
+        }
+    }
+
+    private fun handleDogStatus() {
+        if (DogOutsidePreferences.getDogOutside(this)) {
+            handleDogOutside()
+        } else {
+            handleDogInside()
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == this.getString(R.string.pref_dog_status_key)) {
-            if (DogOutsidePreferences.getDogOutside(this)) {
-                handleDogOutside()
-            } else {
-                handleDogInside()
-            }
+            handleDogStatus()
+        }
+    }
 
+    /** Defines callbacks for service binding, passed to bindService()  */
+    private val mConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName,
+                                        service: IBinder) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            val binder = service as LocalBinder
+            mService = binder.service
+            mBound = true
+
+            handleDogStatus()
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mBound = false
         }
     }
 }
