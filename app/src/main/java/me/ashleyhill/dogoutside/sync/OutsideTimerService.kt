@@ -1,27 +1,17 @@
 package me.ashleyhill.dogoutside.sync
 
-import android.content.Intent
-import android.os.IBinder
-import android.R.string.cancel
-import android.app.IntentService
 import android.app.Service
-import android.content.Context
+import android.content.Intent
 import android.os.Binder
-import android.support.annotation.Nullable
+import android.os.IBinder
 import android.util.Log
-import java.util.Timer;
-import java.util.TimerTask;
-import android.widget.Toast
 import me.ashleyhill.dogoutside.util.DogOutsideNotificationUtils
+import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.timerTask
 
 private val TAG = OutsideTimerService::class.java.simpleName
 
 
-/**
- * https://medium.com/@raziaranisandhu/create-services-never-stop-in-android-b5dcfc5fb4b2
- */
 class OutsideTimerService : Service() {
     companion object {
         private val INTERVAL = TimeUnit.SECONDS.toMillis(1)

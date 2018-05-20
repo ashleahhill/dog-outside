@@ -16,8 +16,8 @@ import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 class DogOutsideNotificationUtils {
 
     companion object {
-        private val OUTSIDE_NOTIFICATION_ID: Int = 1000
-        private val OUTSIDE_NOTIFICATION_CHANNEL_ID: String = "dog-outside-timer"
+        private const val OUTSIDE_NOTIFICATION_ID: Int = 1000
+        private const val OUTSIDE_NOTIFICATION_CHANNEL_ID: String = "dog-outside-timer"
         private var notificationBuilder: NotificationCompat.Builder? = null
 
         private fun createOutsideNotification(context: Context) {

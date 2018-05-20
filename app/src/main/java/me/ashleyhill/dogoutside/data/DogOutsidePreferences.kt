@@ -1,5 +1,6 @@
 package me.ashleyhill.dogoutside.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import me.ashleyhill.dogoutside.R
@@ -25,8 +26,9 @@ class DogOutsidePreferences {
            return context.getString(R.string.notification_dog_outside, dogName)
         }
 
+        @SuppressLint("ApplySharedPref")
         fun setDogStatus(context: Context, string: String) {
-            log(string);
+            log(string)
             with(getSharedPreferences(context).edit()) {
                 putString(context.getString(R.string.pref_dog_status_key), string)
                 commit()
@@ -41,6 +43,7 @@ class DogOutsidePreferences {
             return getDogStatus(context) == context.getString(R.string.pref_dog_status_outside)
         }
 
+        @SuppressLint("ApplySharedPref")
         fun setTimeOutsideStart(context: Context) {
             log("Time start")
             with(getSharedPreferences(context).edit()) {
@@ -48,6 +51,7 @@ class DogOutsidePreferences {
                 commit()
             }
         }
+        @SuppressLint("ApplySharedPref")
         fun clearTimeOutsideStart(context: Context) {
             log("Time start")
             with(getSharedPreferences(context).edit()) {
@@ -62,7 +66,7 @@ class DogOutsidePreferences {
 
         fun getElapsedTimeOutside(context: Context): Long {
 
-            var timeOutsideStart = getTimeOutsideStart(context)
+            val timeOutsideStart = getTimeOutsideStart(context)
 
             if (timeOutsideStart > 0 && System.currentTimeMillis() > timeOutsideStart) {
                 return System.currentTimeMillis() - timeOutsideStart
@@ -72,12 +76,12 @@ class DogOutsidePreferences {
         }
 
         fun getTimeElapsedOutsideFormatted(context: Context): String {
-            var elapsedTimeOutside = getElapsedTimeOutside(context)
+            val elapsedTimeOutside = getElapsedTimeOutside(context)
 
             if (elapsedTimeOutside > 0) {
-                var totalMinutes = elapsedTimeOutside / 1000
-                var minutes = totalMinutes / 60
-                var seconds = totalMinutes % 60
+                val totalMinutes = elapsedTimeOutside / 1000
+                val minutes = totalMinutes / 60
+                val seconds = totalMinutes % 60
 
                 return String.format("%d:%02d", minutes, seconds)
             }

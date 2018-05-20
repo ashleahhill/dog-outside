@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <array name="pref_dog_status_values">
-        <item>@string/pref_dog_status_outside</item>
-        <item>@string/pref_dog_status_inside</item>
-        <item>@string/pref_dog_status_bed</item>
-    </array>
-</resources>
