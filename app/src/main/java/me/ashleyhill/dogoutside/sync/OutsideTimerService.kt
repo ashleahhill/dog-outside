@@ -15,14 +15,27 @@ private val TAG = OutsideTimerService::class.java.simpleName
 class OutsideTimerService : Service() {
     companion object {
         private val INTERVAL = TimeUnit.SECONDS.toMillis(1)
+        private var timer: Timer? = null
+        private var timerActive = false
     }
 
-    private var timer: Timer? = null
     private val mBinder = LocalBinder()
 
     override fun onBind(intent: Intent): IBinder? {
+        if (timer == null) {
+            timer = Timer()
+        }
 
         return mBinder
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        super.onUnbind(intent)
+        return true
+    }
+
+    override fun onRebind(intent: Intent?) {
+        super.onRebind(intent)
     }
 
     override fun onCreate() {
@@ -44,27 +57,38 @@ class OutsideTimerService : Service() {
     }
 
     fun startTimer() {
-        if (timer == null) {
-            timer = Timer()
+        Log.d(TAG, "Start Timer")
+        if (!timerActive) {
+
+            timer?.scheduleAtFixedRate(NotifyTask(), 0, INTERVAL)
+            timerActive = true
         }
-        timer?.scheduleAtFixedRate(NotifyTask(), 0, INTERVAL)
     }
 
     fun stopTimer() {
+        Log.d(TAG, "Stop Timer")
         DogOutsideNotificationUtils.cancelNotifyOutside(this@OutsideTimerService.baseContext)
-        timer?.cancel()
-        timer = null
+        killTimer()
+        stopSelf()
+    }
+
+    private fun killTimer() {
+        timerActive = false
+        if (timer != null) {
+            timer?.cancel()
+            timer = Timer()
+        }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d(TAG, "Start Service")
+
 
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
         Log.d(TAG, "Destroy Service")
-
         super.onDestroy()
     }
 }

@@ -44,7 +44,13 @@ class DogOutsidePreferences {
         }
 
         @SuppressLint("ApplySharedPref")
-        fun setTimeOutsideStart(context: Context) {
+        fun setTimeOutsideStart(context: Context, reset: Boolean?) {
+
+            if (reset != null && reset == false) {
+                if (getTimeOutsideStart(context) > 0) {
+                    return
+                }
+            }
             log("Time start")
             with(getSharedPreferences(context).edit()) {
                 putLong(context.getString(R.string.pref_dog_outside_start_key), System.currentTimeMillis())

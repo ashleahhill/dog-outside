@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
@@ -25,12 +26,13 @@ class MainActivity :
         setContentView(R.layout.activity_main)
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+        handleDogStatus(false)
     }
 
     override fun onStart() {
         super.onStart()
         val intent = Intent(this, OutsideTimerService::class.java)
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        bindService(intent, mConnection, Context.BIND_DEBUG_UNBIND)
     }
 
     override fun onStop() {
@@ -81,15 +83,25 @@ class MainActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun handleDogOutside() {
-        DogOutsidePreferences.setTimeOutsideStart(this)
+    private fun handleDogOutside(fromUpdate: Boolean?) {
+        DogOutsidePreferences.setTimeOutsideStart(this, fromUpdate)
 
         if (mBound) {
+            Log.d(TAG, "service bound")
+            startService(Intent(this, OutsideTimerService::class.java))
+            mService?.startTimer()
+        } else {
+            Log.d(TAG, "service not bound")
+            val intent = Intent(this, OutsideTimerService::class.java)
+            startService(intent)
+            bindService(intent, mConnection, Context.BIND_DEBUG_UNBIND)
+
             mService?.startTimer()
         }
     }
 
     private fun handleDogInside() {
+        Log.d(TAG, "handleDogInside")
         DogOutsidePreferences.clearTimeOutsideStart(this)
 
         if (mBound) {
@@ -97,9 +109,9 @@ class MainActivity :
         }
     }
 
-    private fun handleDogStatus() {
+    private fun handleDogStatus(fromUpdate: Boolean?) {
         if (DogOutsidePreferences.getDogOutside(this)) {
-            handleDogOutside()
+            handleDogOutside(fromUpdate)
         } else {
             handleDogInside()
         }
@@ -107,7 +119,7 @@ class MainActivity :
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == this.getString(R.string.pref_dog_status_key)) {
-            handleDogStatus()
+            handleDogStatus(true)
         }
     }
 
@@ -120,8 +132,6 @@ class MainActivity :
             val binder = service as LocalBinder
             mService = binder.service
             mBound = true
-
-            handleDogStatus()
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
