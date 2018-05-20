@@ -33,15 +33,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_dog_title" />
 
-    <Switch
-        android:id="@+id/switch_away"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:checked="false"
-        android:switchPadding="8dp"
-        android:text="@string/pref_away_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_dog_title"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_dog_status" />
+    <!--<Switch-->
+        <!--android:id="@+id/switch_away"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:checked="false"-->
+        <!--android:switchPadding="8dp"-->
+        <!--android:text="@string/pref_away_title"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/tv_dog_title"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/spinner_dog_status" />-->
 
 </android.support.constraint.ConstraintLayout>
