@@ -27,7 +27,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.ashleyhill.dogoutside.MainActivity" />
         </activity>
-        <service android:name=".sync.OutsideTimerService" />
+        <service android:name=".sync.OutsideTimerService" android:exported="false" />
         <!--<service android:name=".sync.OutsideTimerJobService" android:permission="android.permission.BIND_JOB_SERVICE" />-->
     </application>
 

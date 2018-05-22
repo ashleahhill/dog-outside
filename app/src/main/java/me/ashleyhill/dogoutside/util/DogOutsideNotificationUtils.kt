@@ -3,11 +3,13 @@ package me.ashleyhill.dogoutside.util
 import android.app.NotificationManager
 import android.app.NotificationChannel
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.util.Log
 import me.ashleyhill.dogoutside.MainActivity
 import me.ashleyhill.dogoutside.R
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
@@ -19,8 +21,10 @@ class DogOutsideNotificationUtils {
         private const val OUTSIDE_NOTIFICATION_ID: Int = 1000
         private const val OUTSIDE_NOTIFICATION_CHANNEL_ID: String = "dog-outside-timer"
         private var notificationBuilder: NotificationCompat.Builder? = null
+        private var TAG: String = DogOutsideNotificationUtils::class.java.simpleName
 
         private fun createOutsideNotification(context: Context) {
+            Log.d(TAG, "Create Notification")
 
             with(context) {
                 createNotificationChannel(this)
@@ -36,14 +40,23 @@ class DogOutsideNotificationUtils {
             }
         }
 
-        fun notifyOutside(context: Context) {
-            val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
-
+        fun startService(context: Service) {
             if (notificationBuilder == null) {
                 createOutsideNotification(context)
             }
             notificationBuilder!!.setContentText(DogOutsidePreferences.getTimeElapsedOutsideFormatted(context))
+                context.startForeground(OUTSIDE_NOTIFICATION_ID, notificationBuilder!!.build())
+        }
 
+        fun notifyOutside(context: Context) {
+
+            if (notificationBuilder == null) {
+                createOutsideNotification(context)
+            }
+
+            notificationBuilder!!.setContentText(DogOutsidePreferences.getTimeElapsedOutsideFormatted(context))
+
+            val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
             notificationManager.notify(OUTSIDE_NOTIFICATION_ID, notificationBuilder!!.build())
         }
 

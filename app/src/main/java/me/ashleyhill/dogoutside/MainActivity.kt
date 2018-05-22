@@ -11,6 +11,7 @@ import android.view.MenuItem
 import me.ashleyhill.dogoutside.data.DogOutsidePreferences
 import me.ashleyhill.dogoutside.sync.OutsideTimerService
 import me.ashleyhill.dogoutside.sync.OutsideTimerService.LocalBinder
+import me.ashleyhill.dogoutside.util.OutsideTimerIntentBuilder
 
 private val TAG = MainActivity::class.java.simpleName
 
@@ -26,18 +27,16 @@ class MainActivity :
         setContentView(R.layout.activity_main)
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
-        handleDogStatus(false)
     }
 
     override fun onStart() {
         super.onStart()
-        val intent = Intent(this, OutsideTimerService::class.java)
-        bindService(intent, mConnection, Context.BIND_DEBUG_UNBIND)
+        bindTimer()
     }
 
     override fun onStop() {
         super.onStop()
-        unbindService(mConnection)
+        unbindTimer()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -83,20 +82,26 @@ class MainActivity :
         return super.onOptionsItemSelected(item)
     }
 
+    private fun bindTimer() {
+        val intent = OutsideTimerIntentBuilder(this).build()
+
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindTimer() {
+        unbindService(mConnection)
+    }
+
     private fun handleDogOutside(fromUpdate: Boolean?) {
+        Log.d(TAG, "Handle Dog Outside")
         DogOutsidePreferences.setTimeOutsideStart(this, fromUpdate)
 
         if (mBound) {
             Log.d(TAG, "service bound")
-            startService(Intent(this, OutsideTimerService::class.java))
-            mService?.startTimer()
+            startService(OutsideTimerIntentBuilder(this).setCommand(OutsideTimerIntentBuilder.START).build())
         } else {
             Log.d(TAG, "service not bound")
-            val intent = Intent(this, OutsideTimerService::class.java)
-            startService(intent)
-            bindService(intent, mConnection, Context.BIND_DEBUG_UNBIND)
 
-            mService?.startTimer()
         }
     }
 
@@ -105,11 +110,15 @@ class MainActivity :
         DogOutsidePreferences.clearTimeOutsideStart(this)
 
         if (mBound) {
-            mService?.stopTimer()
+            startService(OutsideTimerIntentBuilder(this).setCommand(OutsideTimerIntentBuilder.STOP).build())
+        } else {
+            Log.d(TAG, "service not bound")
         }
     }
 
     private fun handleDogStatus(fromUpdate: Boolean?) {
+        Log.d(TAG, "Handle Dog Status")
+
         if (DogOutsidePreferences.getDogOutside(this)) {
             handleDogOutside(fromUpdate)
         } else {
@@ -132,6 +141,7 @@ class MainActivity :
             val binder = service as LocalBinder
             mService = binder.service
             mBound = true
+            handleDogStatus(false)
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
